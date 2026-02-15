@@ -6,8 +6,9 @@ const connectDb = require("./databases/connectDb")
 const logger = require("./middleware/reqLogger")
 const errorHandler = require("./middleware/errorHandler")
 const routes = require("./routes/postRoutes")
+const userRoutes = require('./routes/userRoutes')
 
-const PORT = process.env.PORT || 5012
+const PORT = process.env.PORT || 5008
 
 connectDb()
 
@@ -16,6 +17,8 @@ app.use(cors("*"))
 app.use(logger)
 
 app.use('/api', routes)
+app.use('/api/auth', userRoutes)
+
 app.use(errorHandler)
 app.listen(PORT, () => {
   console.log("API is running on port " + PORT)
