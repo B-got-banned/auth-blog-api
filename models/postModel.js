@@ -5,7 +5,7 @@ const postSchema = new mongoose.Schema({
   opening: {type: String, default: "An interesting post!", minlength: 3},
   subhead: {type: String, required: true, minlength: 5},
   content: {type: String, required: true, minlength: 20},
-  author: {type: String, default: "Anonymous"}
+  author: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}
 },
 {timestamps: true})
 

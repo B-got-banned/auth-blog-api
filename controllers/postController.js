@@ -6,14 +6,19 @@ const makePost = async (req, res, next) => {
     title: Joi.string().min(5).max(200).required(),
     opening: Joi.string().min(3).default("An interesting post!"),
     subhead: Joi.string().min(5).required(),
-    content: Joi.string().min(20).required(),
-    author: Joi.string().optional().default("Guest"),
+    content: Joi.string().min(20).required()
   })
 
-  const {error, value} = postSchema.validate(req.body)
+  const {error} = postSchema.validate(req.body)
   if(error) return res.status(400).json({Error: "Please provide post title, subhead and content."})
   try {
-    const newPost = new postModel(value)
+    const newPost = new postModel({
+      title: req.body.title,
+      opening: req.body.opening,
+      subhead: req.body.subhead,
+      content: req.body.content,
+      author: req.user._id
+    })
     await newPost.save()
     return res.status(200).json({Message: "Post created.", Data: newPost})
   } catch (error) {
@@ -25,7 +30,7 @@ const getAllPosts = async (req, res, next) => {
   const {limit = 10, page = 1} = req.query
   const skip = (page - 1) * limit
   try {
-    const posts = await postModel.find({}).sort({createdAt: -1}).limit(limit).skip(skip)
+    const posts = await postModel.find({}).populate('author', 'name').sort({createdAt: -1}).limit(limit).skip(skip)
 
     return res.status(200).json({
       Message: "Posts fetched",
@@ -66,15 +71,16 @@ const updatePostById = async (req, res, next) => {
       title: Joi.string().min(5).optional(),
       opening: Joi.string().min(5).optional(),
       subhead: Joi.string().min(5).optional(),
-      content: Joi.string().min(20).optional(),
-      author: Joi.string().optional(),
+      content: Joi.string().min(20).optional()
    })
 
     const {error} = postSchema.validate(req.body)
     if(error || !req.body) return res.status(400).json({Error: "Please provide information to be replaced."})
-    const updatedPost = await postModel.findByIdAndUpdate(req.params.id, {...req.body}, {new: true, runValidators: true})
+    const initialPost = await postModel.findById(req.params.id)
+    if (!initialPost) return res.status(404).json({Message: `Post with ID ${req.params.id} does not exist`})
+    if(initialPost.author != req.user.id) return res.status(401).json({Error: "You cannot make changes to posts that are not yours."})
 
-    if (!updatedPost) return res.status(404).json({Message: `Post with ID ${req.params.id} does not exist`})
+    const updatedPost = await postModel.findByIdAndUpdate(req.params.id, {...req.body}, {new: true, runValidators: true})
     return res.status(200).json({Message: "Post updated", Data: updatedPost})
   } catch (error) {
     console.error(error)
@@ -83,6 +89,9 @@ const updatePostById = async (req, res, next) => {
 }
 const deletePostById = async (req, res, next) => {
   try {
+    const initialPost = await postModel.findById(req.params.id)
+    if(initialPost.author != req.user.id) return res.status(401).json({Error: "You cannot make changes to posts that are not yours."})
+
     const post = await postModel.findByIdAndDelete(req.params.id)
     if(!post) res.status(404).json({Message: `Post with ID ${req.params.id} does not exist`})
     return res.status(200).json({Message: "Post deleted successfully."})
