@@ -7,6 +7,7 @@ const logger = require("./middleware/reqLogger")
 const errorHandler = require("./middleware/errorHandler")
 const routes = require("./routes/postRoutes")
 const userRoutes = require('./routes/userRoutes')
+const cookieParser = require("cookie-parser")
 
 const PORT = process.env.PORT || 5008
 
@@ -14,6 +15,7 @@ connectDb()
 
 app.use(express.json())
 app.use(cors("*"))
+app.use(cookieParser())
 app.use(logger)
 
 app.use('/api', routes)
