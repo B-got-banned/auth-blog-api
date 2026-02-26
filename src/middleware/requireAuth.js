@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const userModel = require('../models/userModel')
+const config = require('../config/config')
 
 const requireAuth = async (req, res, next) => {
   const authHeader = req.header('Authorization')
@@ -9,7 +10,7 @@ const requireAuth = async (req, res, next) => {
   const token = authHeader.split(' ')[1]
 
   try{
-    const payload = jwt.verify(token, process.env.JWT_SECRET)
+    const payload = jwt.verify(token, config.jwtString)
 
     const user = await userModel.findById(payload.userId)
     if(!user) return res.status(404).json({Error: "User does not exist :/"})

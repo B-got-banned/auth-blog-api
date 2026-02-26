@@ -1,15 +1,12 @@
-require("dotenv").config()
 const express = require("express")
 const app = express()
 const cors = require("cors")
-const connectDb = require("./databases/connectDb")
+const connectDb = require("./config/connectDb")
 const logger = require("./middleware/reqLogger")
 const errorHandler = require("./middleware/errorHandler")
 const routes = require("./routes/postRoutes")
 const userRoutes = require('./routes/userRoutes')
 const cookieParser = require("cookie-parser")
-
-const PORT = process.env.PORT || 5008
 
 connectDb()
 
@@ -18,10 +15,11 @@ app.use(cors("*"))
 app.use(cookieParser())
 app.use(logger)
 
-app.use('/api', routes)
+
 app.use('/api/auth', userRoutes)
+app.use('/api', routes)
 
 app.use(errorHandler)
-app.listen(PORT, () => {
-  console.log("API is running on port " + PORT)
-})
+
+
+module.exports = app
