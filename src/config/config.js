@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const envFormat = ['MONGODB_URI', 'JWT_SECRET', 'JWT_REFRESH_SECRET']
+const envFormat = ['MONGODB_URI', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'CLOUDINARY_NAME', 'CLOUDINARY_API', 'CLOUDINARY_SECRET']
 
 envFormat.forEach((vari) => {
   if(!process.env[vari]){
@@ -13,5 +13,8 @@ module.exports = Object.freeze({
   port: Number(process.env.PORT) || 5008,
   dbUrl: process.env.MONGODB_URI,
   jwtString: process.env.JWT_SECRET,
-  jwtRefresh: process.env.JWT_REFRESH_SECRET
+  jwtRefresh: process.env.JWT_REFRESH_SECRET,
+  cloudName: process.env.CLOUDINARY_NAME,
+  cloudAPI: process.env.CLOUDINARY_API,
+  cloudSecret: process.env.CLOUDINARY_SECRET
 })
