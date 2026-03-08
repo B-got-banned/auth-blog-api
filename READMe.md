@@ -24,6 +24,8 @@ The API allows authenticated users to create, read, update, delete, and search b
 - Joi (Input Validation)
 - bcrypt
 - dotenv
+- Multer
+- Cloudinary
 - Hosted on Render
 
 ---
@@ -44,6 +46,8 @@ The API allows authenticated users to create, read, update, delete, and search b
 - Request logging middleware
 - Centralized error handling
 - Modular and maintainable architecture
+- Image upload support using Multer and Cloudinary
+- Optional profile picture during user signup
 
 ---
 
@@ -129,9 +133,12 @@ Create a `.env` file with the following:
 
 ```
 PORT=5008
-MONGO_URI=your_mongodb_connection_string
+MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_access_token_secret
 JWT_REFRESH_SECRET=your_refresh_token_secret
+CLOUDINARY_NAME=your_cloud_name
+CLOUDINARY_API=your_cloud_api_key
+CLOUDINARY_SECRET=your_cloud_api_secret
 ```
 
 ---
