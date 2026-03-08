@@ -15,14 +15,23 @@ const signUserUp = async (req, res, next) => {
 
     const hashed = await hashPassword(password)
 
+    let imgUrl = null
+    if(req.file) imgUrl = req.file.path
     const user = new userModel({
       name: name,
       email: email,
-      password: hashed
+      password: hashed,
+      profileImage: imgUrl
     })
 
     await user.save()
-    return res.status(200).json({Message: "User registered successfully! :D"})
+    return res.status(200).json({Message: "User registered successfully! :D",
+      User: {
+        name: user.name,
+        email: user.email,
+        profileImage: user.profileImage
+      }
+    })
   } catch (error) {
       next(error)
   }
@@ -50,7 +59,7 @@ const logUserIn = async (req, res, next) => {
       maxAge: 7 * 24 * 60 * 60 * 1000
     })
     // const token = jwt.sign({userId: user._id, name: user.name}, config.jwtString, {expiresIn: '7d'})
-    const responseUser = {name: user.name, id: user._id, email: user.email}
+    const responseUser = {name: user.name, id: user._id, email: user.email, profileImage: user.profileImage}
 
     return res.status(200).json({Message: `Welcome back, ${user.name}. Here are your details`, responseUser, accessToken})
   } catch (error) {
@@ -88,4 +97,15 @@ const refreshToken = async (req, res, next) => {
   }
 }
 
-module.exports = {signUserUp, logUserIn, refreshToken}
+
+const uploadImage = (req, res, next) => {
+  const fileUrl = req.file.path
+  const fileName = req.file.filename
+
+  console.log(fileName)
+  console.log(fileUrl)
+
+  res.send("Konnichiwa from upload :D")
+}
+
+module.exports = {signUserUp, logUserIn, refreshToken, uploadImage}
