@@ -4,13 +4,13 @@ const cloudinaryStorage = require('multer-storage-cloudinary').CloudinaryStorage
 
 const storage = new cloudinaryStorage({
   cloudinary,
-  params: {folder: 'uploads', allowed_formats: ['jpg', 'png']}
+  params: {folder: 'uploads', allowed_formats: ['jpg', 'png', 'jpeg']}
 })
 
 const upload = multer({
   //dest: "uploads/", //For disk storage
   storage, //for memory storage
-  limits: {fileSize: 2 * 1024 * 1024},
+  limits: {fileSize: 3 * 1024 * 1024},
   fileFilter: (req, file, cb) => {
     const allowed = ['image/png', 'image/jpeg']
 
