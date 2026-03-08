@@ -2,12 +2,15 @@ const postModel = require("../models/postModel")
 
 const makePost = async (req, res, next) => {
   try {
+    let imgUrls = []
+    if(req.files) imgUrls = req.files.map(file => file.path)
     const newPost = new postModel({
       title: req.body.title,
       opening: req.body.opening,
       subhead: req.body.subhead,
       content: req.body.content,
-      author: req.user._id
+      author: req.user._id,
+      images: imgUrls
     })
     await newPost.save()
     return res.status(200).json({Message: "Post created.", Data: newPost})

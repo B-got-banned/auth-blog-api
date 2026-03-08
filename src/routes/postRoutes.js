@@ -2,6 +2,7 @@ const express = require("express")
 const {makePost, getAllPosts, getPostById, getPostsByKeyword, updatePostById, deletePostById} = require("../controllers/postController")
 const requireAuth = require('../middleware/requireAuth')
 const {validateArticle, validateUpdate} = require('../validations/postValidation')
+const uploadBlogImage = require("../middleware/uploadBlogImage")
 const router = express.Router()
 
 router.get('/', (req, res) => {
@@ -10,7 +11,7 @@ router.get('/', (req, res) => {
 
 router.use(requireAuth)
 
-router.post('/articles', validateArticle, makePost)
+router.post('/articles', validateArticle, uploadBlogImage.array("images", 5), makePost)
 router.get('/articles', getAllPosts)
 router.get('/articles/search', getPostsByKeyword)
 router.get('/articles/:id', getPostById)
