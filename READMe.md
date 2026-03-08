@@ -48,6 +48,7 @@ The API allows authenticated users to create, read, update, delete, and search b
 - Modular and maintainable architecture
 - Image upload support using Multer and Cloudinary
 - Optional profile picture during user signup
+- Optional blog post images (maximum of 5 per post) during blog creation
 
 ---
 
@@ -67,7 +68,8 @@ auth-blog-api/
 │    │   ├── errorHandler.js
 │    │   ├── reqLogger.js
 │    │   ├── requireAuth.js
-│    │   └── upload.js
+│    │   ├── upload.js
+│    │   └── uploadBlogImage.js
 │    ├── models/
 │    │   ├── postModel.js
 │    │   └── userModel.js
