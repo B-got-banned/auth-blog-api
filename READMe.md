@@ -55,25 +55,37 @@ The API allows authenticated users to create, read, update, delete, and search b
 
 ```
 auth-blog-api/
-├── controllers/
-│   ├── postController.js
-│   └── userController.js
-├── databases/
-│   └── connectDb.js
-├── middleware/
-│   ├── errorHandler.js
-│   ├── reqLogger.js
-│   └── requireAuth.js
-├── models/
-│   ├── postModel.js
-│   └── userModel.js
-├── routes/
-│   ├── postRoutes.js
-│   └── userRoutes.js
-├── utils/
-│   └── jwt.js
-├── app.js
-└── package.json
+├── src/
+│    ├── config/
+│    │   ├── cloudinary.js
+│    │   ├── config.js
+│    │   └── connectDb.js
+│    ├── controllers/
+│    │   ├── postController.js
+│    │   └── userController.js
+│    ├── middleware/
+│    │   ├── errorHandler.js
+│    │   ├── reqLogger.js
+│    │   ├── requireAuth.js
+│    │   └── upload.js
+│    ├── models/
+│    │   ├── postModel.js
+│    │   └── userModel.js
+│    ├── routes/
+│    │   ├── postRoutes.js
+│    │   └── userRoutes.js
+│    ├── utils/
+│    │   ├── bcrypt.js
+│    │   └── jwt.js
+│    ├── validations/
+│    │   ├── postValidation.js
+│    │   └── userValidation.js
+│    └── app.js
+├── .env.example
+├── .gitignore
+├── package-lock.json
+├── package.json
+└── server.js
 ```
 
 ---
